@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package example.locations;
+
+import "kalix/annotations.proto";
+import "assets.proto";
+import "google/api/annotations.proto";
+
+
+message AssetLocation {
+  string asset_id = 1;
+  string location = 2;
+}
+
+message AssetsAtLocation {
+  repeated string asset_ids = 1;
+}
+
+message ByLocationRequest {
+  string location = 1;
+}
+
+service AssetsByLocation {
+
+  option (kalix.codegen) = {
+    view: {} 
+  };
+
+  rpc UpdateLocation(example.assets.CheckedIn) returns (AssetLocation) { 
+    option (kalix.method).eventing.in = { 
+      topic: "jroper-kalix-assets"
+    };
+    option (kalix.method).view.update = { 
+      table: "assets_by_location"
+      transform_updates: true
+    };
+  }
+
+  rpc GetAssets(ByLocationRequest) returns (AssetsAtLocation) { 
+    option (kalix.method).view.query = { 
+      query: "SELECT asset_id as asset_ids FROM assets_by_location WHERE location = :location"
+    };
+    option (google.api.http) = {
+      get: "/location/{location}"
+    };
+  }
+}

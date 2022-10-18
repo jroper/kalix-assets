@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package example.assets;
+
+import "kalix/annotations.proto";
+import "assets.proto";
+
+service PublishAssets {
+
+  option (kalix.codegen) = {
+    action: {}  
+  };
+
+  rpc HandleCheckedIn(example.assets.CheckedIn) returns (example.assets.CheckedIn) {
+    option (kalix.method).eventing = {
+      in: { event_sourced_entity: "asset" }
+      out: { topic: "jroper-kalix-assets" }
+    };
+  }
+}

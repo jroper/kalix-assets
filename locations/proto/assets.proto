@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package example.assets;
+
+// Events
+
+// An asset has been checked in at a location
+message CheckedIn {
+  string location = 1;
+}
+

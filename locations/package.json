@@ -1,0 +1,26 @@
+{
+  "name": "locations",
+  "version": "0.1.0",
+  "dependencies": {
+    "@kalix-io/kalix-javascript-sdk": "1.0.3"
+  },
+  "devDependencies": {
+    "@kalix-io/kalix-scripts": "1.0.3",
+    "typescript": "^4.7.4"
+  },
+  "config": {
+    "typescript": true,
+    "dockerImage": "jamesroper/kalix-asset-locations",
+    "sourceDir": "./src",
+    "testSourceDir": "./test",
+    "protoSourceDir": "./proto",
+    "generatedSourceDir": "./lib/generated",
+    "compileDescriptorArgs": []
+  },
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "kalix-scripts build && tsc",
+    "package": "kalix-scripts package",
+    "deploy": "kalix-scripts deploy"
+  }
+}

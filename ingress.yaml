@@ -1,0 +1,10 @@
+host: dark-band-8115.us-east1.apps.kalix.dev
+routes:
+- prefix: /asset
+  route:
+    service: assets
+- prefix: /location
+  route:
+    service: locations
+tls: {}
+

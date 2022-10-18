@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "kalix/annotations.proto";
+import "google/api/annotations.proto";
+
+package example.assets;
+
+// Commands
+
+// Check an asset in at a location
+message CheckInAsset {
+  string asset_id = 1 [(kalix.field).entity_key = true];
+  string location = 2;
+}
+
+// Get an asset
+message GetAsset {
+  string asset_id = 1 [(kalix.field).entity_key = true];
+}
+
+// Events
+
+// An asset has been checked in at a location
+message CheckedIn {
+  string location = 1;
+}
+
+// State
+
+// The current asset state
+message Asset {
+  string location = 1;
+}
+
+// The Entity
+
+// Manages assets
+service AssetService {
+  option (kalix.service) = {
+    type: SERVICE_TYPE_ENTITY
+    component: "Asset"
+  };
+
+  rpc CheckIn(CheckInAsset) returns (google.protobuf.Empty) {
+    option (google.api.http) = { 
+      post: "/asset/{asset_id}"
+      body: "*"
+    };
+  }
+
+  rpc Get(GetAsset) returns (Asset) {
+    option (google.api.http) = { 
+      get: "/asset/{asset_id}"
+    };
+  }
+}
+
+option (kalix.file).event_sourced_entity = {
+  name: "Asset"
+  entity_type: "asset"
+  state: "Asset"
+  events: "CheckedIn"
+};
+
